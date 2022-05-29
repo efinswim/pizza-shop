@@ -1,4 +1,19 @@
+import { useState } from 'react';
+
 function Sort() {
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedSort, setSelectedSort] = useState(0);
+  const sortList = ['популярности', 'цене', 'алфавиту'];
+
+  const handleModal = () => {
+    setOpenModal(!openModal);
+  };
+
+  const applySelectedSort = (index) => {
+    setSelectedSort(index);
+    handleModal()
+  };
+
   return (
     <div className='sort'>
       <div className='sort__label'>
@@ -14,15 +29,22 @@ function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>популярности</span>
+        <span onClick={() => handleModal()}>{sortList[selectedSort]}</span>
       </div>
-      <div className='sort__popup'>
-        <ul>
-          <li className='active'>популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
-        </ul>
-      </div>
+      {openModal && (
+        <div className='sort__popup'>
+          <ul>
+            {sortList.map((item, index) => (
+              <li
+                key={index + 1}
+                onClick={() => applySelectedSort(index)}
+                className={selectedSort === index ? 'active' : ''}>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

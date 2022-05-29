@@ -3,15 +3,15 @@ import { useState } from 'react';
 function PizzaItem({ name, price, imageUrl, sizes, types }) {
   const [pizzaSize, setPizzaSize] = useState(null);
   const [pizzaType, setPizzaType] = useState(0);
-  const nameTypes = ['тонкое', 'толстое']
+  const nameTypes = ['тонкое', 'толстое'];
 
   const changePizzaSize = (index) => {
     setPizzaSize(index);
   };
 
   const changePizzaType = (index) => {
-    setPizzaType(index)
-  }
+    setPizzaType(index);
+  };
 
   return (
     <div className='pizza-block'>
@@ -21,6 +21,7 @@ function PizzaItem({ name, price, imageUrl, sizes, types }) {
         <ul>
           {types.map((item, index) => (
             <li
+              key={item}
               className={pizzaType === item ? 'active' : ''}
               onClick={() => changePizzaType(item)}>
               {nameTypes[item]}
@@ -30,6 +31,7 @@ function PizzaItem({ name, price, imageUrl, sizes, types }) {
         <ul>
           {sizes.map((item, index) => (
             <li
+              key={item}
               className={pizzaSize === index ? 'active' : ''}
               onClick={() => changePizzaSize(index)}>
               {item} см.
