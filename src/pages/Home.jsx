@@ -18,10 +18,11 @@ export default function Home() {
         setPizzas(data);
         setIsPizzasLoading(false);
       });
+    window.scrollTo(0, 0)  
   }, []);
 
   return (
-    <>
+    <div className='container'>
       <div className='content__top'>
         <Categories />
         <Sort />
@@ -32,6 +33,6 @@ export default function Home() {
           ? [...new Array(8)].map((item, index) => <PizzaItemSkeleton key={index + 1} />)
           : pizzas.map((item) => <PizzaItem key={item.id} {...item} />)}
       </div>
-    </>
+    </div>
   );
 }
