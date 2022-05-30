@@ -1,17 +1,19 @@
 import { useState } from 'react';
 
-function Sort() {
+function Sort({ value, onChangeSort }) {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedSort, setSelectedSort] = useState(0);
-  const sortList = ['популярности', 'цене', 'алфавиту'];
+  const sortList = [
+    { name: 'популярности(DESC)', sortProperty: 'rating' },
+    { name: 'популярности(ASC)', sortProperty: '-rating' },
+    { name: 'цене(DESC)', sortProperty: 'price' },
+    { name: 'цене(ASC)', sortProperty: '-price' },
+    { name: 'названию(DESC)', sortProperty: 'title' },
+    { name: 'названию(ASC)', sortProperty: '-title' },
+  ];
 
-  const handleModal = () => {
+  const onClickListItem = (index) => {
+    onChangeSort(index);
     setOpenModal(!openModal);
-  };
-
-  const applySelectedSort = (index) => {
-    setSelectedSort(index);
-    handleModal()
   };
 
   return (
@@ -29,7 +31,7 @@ function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => handleModal()}>{sortList[selectedSort]}</span>
+        <span onClick={() => setOpenModal(!openModal)}>{value.name}</span>
       </div>
       {openModal && (
         <div className='sort__popup'>
@@ -37,9 +39,9 @@ function Sort() {
             {sortList.map((item, index) => (
               <li
                 key={index + 1}
-                onClick={() => applySelectedSort(index)}
-                className={selectedSort === index ? 'active' : ''}>
-                {item}
+                onClick={() => onClickListItem(item)}
+                className={value.sortProperty === item.sortProperty ? 'active' : ''}>
+                {item.name}
               </li>
             ))}
           </ul>
