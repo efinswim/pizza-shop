@@ -11,8 +11,7 @@ export default function Home({ searchValue }) {
   const [isPizzasLoading, setIsPizzasLoading] = useState(true);
   const [categoryId, setCategoryId] = useState(0);
   const [sortType, setSortType] = useState({ name: 'популярности', sortProperty: 'rating' });
-  const [currentPage, setCurrentPage] = useState(1);  
-
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     setIsPizzasLoading(true);
@@ -59,7 +58,7 @@ export default function Home({ searchValue }) {
           ? [...new Array(8)].map((item, index) => <PizzaItemSkeleton key={index + 1} />)
           : filterPizza}
       </div>
-      <Pagination onChangePage={pageNumber => setCurrentPage(pageNumber)} />
+      <Pagination onChangePage={(pageNumber) => setCurrentPage(pageNumber)} />
     </div>
   );
 }
