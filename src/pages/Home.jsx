@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
@@ -6,12 +6,18 @@ import PizzaItem from '../components/PizzaItem';
 import PizzaItemSkeleton from '../components/PizzaItemSkeleton';
 import Pagination from '../components/Pagination';
 
-export default function Home({ searchValue }) {
+import { SearchContext } from '../App';
+
+export default function Home() {
   const [pizzas, setPizzas] = useState([]);
   const [isPizzasLoading, setIsPizzasLoading] = useState(true);
   const [categoryId, setCategoryId] = useState(0);
-  const [sortType, setSortType] = useState({ name: 'популярности', sortProperty: 'rating' });
+  const [sortType, setSortType] = useState({
+    name: 'популярности',
+    sortProperty: 'rating',
+  });
   const [currentPage, setCurrentPage] = useState(1);
+  const { searchValue } = useContext(SearchContext);
 
   useEffect(() => {
     setIsPizzasLoading(true);
@@ -35,7 +41,9 @@ export default function Home({ searchValue }) {
     window.scrollTo(0, 0);
   }, [categoryId, sortType, searchValue, currentPage]);
 
-  const filterPizza = pizzas.map((item) => <PizzaItem key={item.id} {...item} />);
+  const filterPizza = pizzas.map((item) => (
+    <PizzaItem key={item.id} {...item} />
+  ));
 
   const filterPizzaLocal = (array) => {
     array.filter((pizza) => {
@@ -49,13 +57,18 @@ export default function Home({ searchValue }) {
   return (
     <div className='container'>
       <div className='content__top'>
-        <Categories value={categoryId} onChangeCategory={(index) => setCategoryId(index)} />
+        <Categories
+          value={categoryId}
+          onChangeCategory={(index) => setCategoryId(index)}
+        />
         <Sort value={sortType} onChangeSort={(index) => setSortType(index)} />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>
         {isPizzasLoading
-          ? [...new Array(8)].map((item, index) => <PizzaItemSkeleton key={index + 1} />)
+          ? [...new Array(8)].map((item, index) => (
+              <PizzaItemSkeleton key={index + 1} />
+            ))
           : filterPizza}
       </div>
       <Pagination onChangePage={(pageNumber) => setCurrentPage(pageNumber)} />
