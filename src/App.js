@@ -7,6 +7,8 @@ import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Cart from './pages/Cart';
 
+import { useSelector, useDispatch } from 'react-redux';
+
 import './scss/app.scss';
 
 export const SearchContext = createContext();
