@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCategoryId } from '../redux/slices/filterSlice';
+import { setCategoryId, setSortType } from '../redux/slices/filterSlice';
 
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
@@ -13,16 +13,13 @@ import { SearchContext } from '../App';
 export default function Home() {
   const [pizzas, setPizzas] = useState([]);
   const [isPizzasLoading, setIsPizzasLoading] = useState(true);
-  const [sortType, setSortType] = useState({
-    name: 'популярности',
-    sortProperty: 'rating',
-  });
+
   const [currentPage, setCurrentPage] = useState(1);
   const { searchValue } = useContext(SearchContext);
 
   const categoryId = useSelector((state) => state.filters.categoryId);
-  console.log('categoryId', categoryId);
-  const dispatch = useDispatch()
+  const sort = useSelector((state) => state.filters.sort);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setIsPizzasLoading(true);
@@ -30,8 +27,8 @@ export default function Home() {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const search = searchValue ? `&search=${searchValue}` : '';
 
-    const sortBy = sortType.sortProperty.replace('-', '');
-    const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc';
+    const sortBy = sort.sortProperty.replace('-', '');
+    const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
 
     fetch(
       `https://62935339089f87a57abe3300.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
@@ -44,20 +41,11 @@ export default function Home() {
         setIsPizzasLoading(false);
       });
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, searchValue, currentPage]);
+  }, [categoryId, sort, searchValue, currentPage]);
 
   const filterPizza = pizzas.map((item) => (
     <PizzaItem key={item.id} {...item} />
   ));
-
-  const filterPizzaLocal = (array) => {
-    array.filter((pizza) => {
-      if (pizza.name.toLowerCase().includes(searchValue.toLowerCase())) {
-        return true;
-      }
-      return false;
-    });
-  };
 
   return (
     <div className='container'>
@@ -66,7 +54,10 @@ export default function Home() {
           value={categoryId}
           onChangeCategory={(index) => dispatch(setCategoryId(index))}
         />
-        <Sort value={sortType} onChangeSort={(index) => setSortType(index)} />
+        <Sort
+          value={sort}
+          onChangeSort={(index) => dispatch(setSortType(index))}
+        />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>

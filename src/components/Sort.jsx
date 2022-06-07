@@ -40,7 +40,9 @@ function Sort({ value, onChangeSort }) {
               <li
                 key={index + 1}
                 onClick={() => onClickListItem(item)}
-                className={value.sortProperty === item.sortProperty ? 'active' : ''}>
+                className={
+                  value.sortProperty === item.sortProperty ? 'active' : ''
+                }>
                 {item.name}
               </li>
             ))}
