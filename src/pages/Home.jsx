@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCategoryId, setSortType } from '../redux/slices/filterSlice';
+import { SearchContext } from '../App';
+
+import axios from 'axios';
 
 import Categories from '../components/Categories';
 import Sort from '../components/Sort';
 import PizzaItem from '../components/PizzaItem';
 import PizzaItemSkeleton from '../components/PizzaItemSkeleton';
 import Pagination from '../components/Pagination';
-
-import { SearchContext } from '../App';
 
 export default function Home() {
   const [pizzas, setPizzas] = useState([]);
@@ -30,16 +31,14 @@ export default function Home() {
     const sortBy = sort.sortProperty.replace('-', '');
     const order = sort.sortProperty.includes('-') ? 'asc' : 'desc';
 
-    fetch(
+    axios.get(
       `https://62935339089f87a57abe3300.mockapi.io/pizzas?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`,
+    ).then(
+      response => {
+        setPizzas(response.data)
+        setIsPizzasLoading(false)
+      }
     )
-      .then(function (response) {
-        return response.json();
-      })
-      .then((data) => {
-        setPizzas(data);
-        setIsPizzasLoading(false);
-      });
     window.scrollTo(0, 0);
   }, [categoryId, sort, searchValue, currentPage]);
 
