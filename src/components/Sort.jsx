@@ -1,15 +1,16 @@
 import { useState } from 'react';
 
+export const sortList = [
+  { name: 'популярности(DESC)', sortProperty: 'rating' },
+  { name: 'популярности(ASC)', sortProperty: '-rating' },
+  { name: 'цене(DESC)', sortProperty: 'price' },
+  { name: 'цене(ASC)', sortProperty: '-price' },
+  { name: 'названию(DESC)', sortProperty: 'title' },
+  { name: 'названию(ASC)', sortProperty: '-title' },
+];
+
 function Sort({ value, onChangeSort }) {
   const [openModal, setOpenModal] = useState(false);
-  const sortList = [
-    { name: 'популярности(DESC)', sortProperty: 'rating' },
-    { name: 'популярности(ASC)', sortProperty: '-rating' },
-    { name: 'цене(DESC)', sortProperty: 'price' },
-    { name: 'цене(ASC)', sortProperty: '-price' },
-    { name: 'названию(DESC)', sortProperty: 'title' },
-    { name: 'названию(ASC)', sortProperty: '-title' },
-  ];
 
   const onClickListItem = (index) => {
     onChangeSort(index);
