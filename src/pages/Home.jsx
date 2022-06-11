@@ -18,6 +18,7 @@ import Sort from '../components/Sort';
 import PizzaItem from '../components/PizzaItem';
 import PizzaItemSkeleton from '../components/PizzaItemSkeleton';
 import Pagination from '../components/Pagination';
+import { useRef } from 'react';
 
 export default function Home() {
   const [pizzas, setPizzas] = useState([]);
@@ -27,12 +28,14 @@ export default function Home() {
 
   const categoryId = useSelector((state) => state.filters.categoryId);
   const sort = useSelector((state) => state.filters.sort);
-  console.log('sort', sort)
+  console.log('sort', sort);
   const { currentPage } = useSelector((state) => state.filters);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isSearch = useRef(false);
+  const isMounted = useRef(false);
 
-  useEffect(() => {
+  const fetchPizzas = () => {
     setIsPizzasLoading(true);
 
     const category = categoryId > 0 ? `category=${categoryId}` : '';
@@ -49,17 +52,28 @@ export default function Home() {
         setPizzas(response.data);
         setIsPizzasLoading(false);
       });
-    window.scrollTo(0, 0);
-  }, [categoryId, sort, searchValue, currentPage]);
+  };
 
   useEffect(() => {
-    const queryString = qs.stringify({
-      sortProperty: sort.sortProperty,
-      categoryId,
-      currentPage,
-    });
+    window.scrollTo(0, 0);
+    if (!isSearch.current) {
+      fetchPizzas();
+    }
 
-    navigate(`?${queryString}`);
+    isSearch.current = false;
+  }, [categoryId, sort.sortProperty, searchValue, currentPage]);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      const queryString = qs.stringify({
+        sortProperty: sort.sortProperty,
+        categoryId,
+        currentPage,
+      });
+
+      navigate(`?${queryString}`);
+    }
+    isMounted.current = true
   }, [categoryId, sort, searchValue, currentPage]);
 
   useEffect(() => {
@@ -75,6 +89,7 @@ export default function Home() {
           sort,
         }),
       );
+      isSearch.current = true;
     }
   }, []);
 
