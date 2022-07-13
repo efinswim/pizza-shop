@@ -28,7 +28,6 @@ export default function Home() {
 
   const categoryId = useSelector((state) => state.filters.categoryId);
   const sort = useSelector((state) => state.filters.sort);
-  console.log('sort', sort);
   const { currentPage } = useSelector((state) => state.filters);
   const dispatch = useDispatch();
   const navigate = useNavigate();
