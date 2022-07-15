@@ -5,6 +5,10 @@ const initialState = {
   items: [],
 };
 
+const findItem = (state, action) => {
+  return state.items.find((item) => action.payload === item.id);
+}
+
 export const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -22,19 +26,19 @@ export const cartSlice = createSlice({
       }, 0);
     },
     removeItem(state, action) {
-      const findItem = state.items.find((item) => action.payload === item.id);
+      const item = findItem(state, action)
       state.items = state.items.filter((obj) => obj.id !== action.payload);
-      state.totalPrice -= findItem.price * findItem.counter;
+      state.totalPrice -= item.price * item.counter;
     },
     plusItem(state, action) {
-      const findItem = state.items.find((item) => action.payload === item.id);
-      findItem.counter++;
-      state.totalPrice += findItem.price;
+      const item = findItem(state, action)
+      item.counter++;
+      state.totalPrice += item.price;
     },
     minusItem(state, action) {
-      const findItem = state.items.find((item) => action.payload === item.id);
-      findItem.counter--;
-      state.totalPrice -= findItem.price;
+      const item = findItem(state, action)
+      item.counter--;
+      state.totalPrice -= item.price;
     },
     clearItems(state) {
       state.items = [];

@@ -1,6 +1,6 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeItem, addItem, plusItem, minusItem } from '../redux/slices/cartSlice';
+import { useDispatch } from 'react-redux';
+import { removeItem, plusItem, minusItem } from '../redux/slices/cartSlice';
 
 const sizesOfPizza = [26, 30, 40]
 
