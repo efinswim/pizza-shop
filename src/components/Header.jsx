@@ -8,6 +8,7 @@ import { cartItems, cartTotalPrice } from '../redux/slices/cartSlice';
 function Header() {
   const basketItems = useSelector(cartItems)
   const basketTotalPrice = useSelector(cartTotalPrice)
+  const totalCount = basketItems.reduce((sum, item) => sum + item.counter, 0)
 
   return (
     <div className='header'>
@@ -54,7 +55,7 @@ function Header() {
                 strokeLinejoin='round'
               />
             </svg>
-            <span>{basketItems.length}</span>
+            <span>{totalCount}</span>
           </Link>
         </div>
       </div>
